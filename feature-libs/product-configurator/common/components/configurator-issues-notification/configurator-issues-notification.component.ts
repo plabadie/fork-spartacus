@@ -2,7 +2,7 @@ import { Component, Optional } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { CartItemContext, OrderEntry } from '@spartacus/cart/base/root';
 import { ICON_TYPE } from '@spartacus/storefront';
-import { EMPTY, Observable } from 'rxjs';
+import { EMPTY, Observable, of } from 'rxjs';
 import { CommonConfiguratorUtilsService } from '../../shared/utils/common-configurator-utils.service';
 
 @Component({
@@ -17,8 +17,9 @@ export class ConfiguratorIssuesNotificationComponent {
     @Optional() protected cartItemContext: CartItemContext
   ) {}
 
-  readonly orderEntry$: Observable<OrderEntry> =
-    this.cartItemContext?.item$ ?? EMPTY;
+  readonly orderEntry$: Observable<OrderEntry> = of({
+    orderCode: '123',
+  } as OrderEntry);
 
   readonly quantityControl$: Observable<FormControl> =
     this.cartItemContext?.quantityControl$ ?? EMPTY;
@@ -36,8 +37,8 @@ export class ConfiguratorIssuesNotificationComponent {
    * @param item - Cart item
    * @returns - whether there are any issues
    */
-  hasIssues(item: OrderEntry): boolean {
-    return this.commonConfigUtilsService.hasIssues(item);
+  hasIssues(_item: OrderEntry): boolean {
+    return true;
   }
 
   /**
