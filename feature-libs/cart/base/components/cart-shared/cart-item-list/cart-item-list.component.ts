@@ -16,6 +16,7 @@ import {
   OrderEntry,
   PromotionLocation,
   SelectiveCartFacade,
+  CartOutlets,
 } from '@spartacus/cart/base/root';
 import { UserIdService } from '@spartacus/core';
 import { OutletContextData } from '@spartacus/storefront';
@@ -54,6 +55,7 @@ export class CartItemListComponent implements OnInit, OnDestroy {
 
   protected _items: OrderEntry[] = [];
   form: FormGroup = new FormGroup({});
+  readonly CartOutlets = CartOutlets;
 
   @Input('items')
   set items(items: OrderEntry[]) {

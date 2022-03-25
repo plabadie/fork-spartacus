@@ -30,6 +30,16 @@
         *ngIf="getControl(item) | async as control"
         [class.is-changed]="control.get('quantity').disabled"
       >
+        <tr aria-hidden="true">
+          <ng-template
+            [cxOutlet]="CartOutlets.ITEM_CONFIGURATOR_ISSUES"
+          ></ng-template>
+          <ng-container *cxFeatureLevel="'4.2'">
+            <cx-cart-item-validation-warning
+              [code]="item.product?.code"
+            ></cx-cart-item-validation-warning>
+          </ng-container>
+        </tr>
         <tr
           cx-cart-item-list-row
           role="row"
