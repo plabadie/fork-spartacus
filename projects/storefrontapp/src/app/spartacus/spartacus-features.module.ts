@@ -2,15 +2,12 @@ import { NgModule } from '@angular/core';
 import {
   AnonymousConsentsModule,
   AuthModule,
-  CartModule,
-  CartOccModule,
   CostCenterOccModule,
   ExternalRoutesModule,
-  OrderOccModule,
   ProductModule,
   ProductOccModule,
-  UserOccTransitional_4_2_Module,
-  UserTransitional_4_2_Module,
+  UserModule,
+  UserOccModule,
 } from '@spartacus/core';
 import {
   AddressBookModule,
@@ -19,8 +16,6 @@ import {
   BannerCarouselModule,
   BannerModule,
   BreadcrumbModule,
-  CartComponentModule,
-  CartPageEventModule,
   CategoryNavigationModule,
   CmsParagraphModule,
   ConsentManagementModule,
@@ -53,19 +48,22 @@ import {
   SiteContextSelectorModule,
   StockNotificationModule,
   TabParagraphContainerModule,
-  WishListModule,
 } from '@spartacus/storefront';
 import { environment } from '../../environments/environment';
 import { AdministrationFeatureModule } from './features/administration-feature.module';
 import { AsmFeatureModule } from './features/asm-feature.module';
 import { BulkPricingFeatureModule } from './features/bulk-pricing-feature.module';
+import { CartBaseFeatureModule } from './features/cart-base-feature.module';
 import { CdcFeatureModule } from './features/cdc-feature.module';
 import { CdsFeatureModule } from './features/cds-feature.module';
-import { ImportExportFeatureModule } from './features/import-export-feature.module';
 import { CheckoutFeatureModule } from './features/checkout-feature.module';
+import { CheckoutScheduledReplenishmentFeatureModule } from './features/checkout-scheduled-replenishment-feature.module';
+import { DigitalPaymentsFeatureModule } from './features/digital-payments-feature.module';
+import { EpdVisualizationFeatureModule } from './features/epd-visualization-feature.module';
+import { ImageZoomFeatureModule } from './features/image-zoom-feature.module';
+import { ImportExportFeatureModule } from './features/import-export-feature.module';
 import { OrderApprovalFeatureModule } from './features/order-approval-feature.module';
 import { OrderFeatureModule } from './features/order-feature.module';
-import { DigitalPaymentsFeatureModule } from './features/digital-payments-feature.module';
 import { ProductConfiguratorRulebasedCpqFeatureModule } from './features/product-configurator-rulebased-cpq-feature.module';
 import { ProductConfiguratorRulebasedFeatureModule } from './features/product-configurator-rulebased-feature.module';
 import { ProductConfiguratorTextfieldFeatureModule } from './features/product-configurator-textfield-feature.module';
@@ -77,8 +75,8 @@ import { StorefinderFeatureModule } from './features/storefinder-feature.module'
 import { TrackingFeatureModule } from './features/tracking-feature.module';
 import { UserFeatureModule } from './features/user-feature.module';
 import { VariantsFeatureModule } from './features/variants-feature.module';
+import { WishListFeatureModule } from './features/wish-list-feature.module';
 import { PickupInStoreFeatureModule } from './features/pickup-in-store-feature.module';
-import { ImageZoomFeatureModule } from './features/image-zoom-feature.module';
 
 const featureModules = [];
 
@@ -89,6 +87,13 @@ if (environment.b2b) {
     OrderApprovalFeatureModule
   );
 }
+
+let CheckoutFeature = CheckoutFeatureModule;
+
+if (environment.b2b) {
+  CheckoutFeature = CheckoutScheduledReplenishmentFeatureModule;
+}
+
 if (environment.cdc) {
   featureModules.push(CdcFeatureModule);
 }
@@ -102,6 +107,9 @@ if (environment.cpq) {
 }
 if (environment.digitalPayments) {
   featureModules.push(DigitalPaymentsFeatureModule);
+}
+if (environment.epdVisualization) {
+  featureModules.push(EpdVisualizationFeatureModule);
 }
 
 @NgModule({
@@ -126,8 +134,8 @@ if (environment.digitalPayments) {
     BreadcrumbModule,
 
     // User Core
-    UserTransitional_4_2_Module,
-    UserOccTransitional_4_2_Module,
+    UserModule,
+    UserOccModule,
     // User UI
     AddressBookModule,
     PaymentMethodsModule,
@@ -160,23 +168,12 @@ if (environment.digitalPayments) {
     ProductSummaryModule,
     ProductIntroModule,
 
-    // Cart Core
-    CartModule.forRoot(),
-    CartOccModule,
-    // Cart UI
-    CartComponentModule,
-    WishListModule,
-
     // Cost Center
     CostCenterOccModule,
-
-    // Order
-    OrderOccModule,
 
     // Page Events
     NavigationEventModule,
     HomePageEventModule,
-    CartPageEventModule,
     ProductPageEventModule,
 
     /************************* Opt-in features *************************/
@@ -186,20 +183,32 @@ if (environment.digitalPayments) {
 
     /************************* Feature libraries *************************/
     UserFeatureModule,
-    CheckoutFeatureModule,
-    AsmFeatureModule,
-    StorefinderFeatureModule,
-    QualtricsFeatureModule,
-    SmartEditFeatureModule,
-    TrackingFeatureModule,
-    VariantsFeatureModule,
+
+    CartBaseFeatureModule,
+    WishListFeatureModule,
     SavedCartFeatureModule,
-    OrderFeatureModule,
     QuickOrderFeatureModule,
     ImportExportFeatureModule,
+
+    OrderFeatureModule,
+
+    CheckoutFeature,
+
+    TrackingFeatureModule,
+
+    AsmFeatureModule,
+
+    StorefinderFeatureModule,
+
+    QualtricsFeatureModule,
+
+    SmartEditFeatureModule,
+
+    VariantsFeatureModule,
     ProductConfiguratorTextfieldFeatureModule,
-    PickupInStoreFeatureModule,
     ImageZoomFeatureModule,
+    PickupInStoreFeatureModule,
+
     ...featureModules,
   ],
 })
