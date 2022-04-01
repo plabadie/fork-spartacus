@@ -3,12 +3,12 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { I18nModule, provideConfig } from '@spartacus/core';
 import {
-  CartOutlets,
   OutletPosition,
   provideOutlet,
   IconModule,
   OutletRefModule,
 } from '@spartacus/storefront';
+import { CartOutlets } from '@spartacus/cart/base/root';
 import { DeliveryPickupOptionsComponent } from './delivery-pickup-options.component';
 import { DeliveryPickupOptionsDialogComponent } from './delivery-pickup-options-dialog/delivery-pickup-options-dialog.component';
 import { defaultDeliveryPickupOptionsLayoutConfig } from './delivery-pickup-options.config';

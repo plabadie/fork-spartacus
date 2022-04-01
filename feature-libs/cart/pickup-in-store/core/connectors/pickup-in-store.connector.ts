@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Cart } from '@spartacus/core';
+import { Cart } from '@spartacus/cart/base/root';
 import { Observable } from 'rxjs';
 import { PickupInStoreAdapter } from './pickup-in-store.adapter';
 
@@ -15,7 +15,7 @@ export class PickupInStoreConnector {
     return this.adapter.loadList(userId);
   }
 
-  //   restorePickupInStore(userId: string, cartId: string): Observable<Cart> {
+  //   restorePickupInStore(userId: string, casing): Observable<Cart> {
   //     return this.adapter.restorePickupInStore(userId, cartId);
   //   }
 

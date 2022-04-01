@@ -7,15 +7,10 @@ import {
   ElementRef,
 } from '@angular/core';
 import { ICON_TYPE, LaunchDialogService } from '@spartacus/storefront';
-import {
-  ActiveCartService,
-  AuthService,
-  Cart,
-  RoutingService,
-} from '@spartacus/core';
+import { AuthService, RoutingService } from '@spartacus/core';
+import { ActiveCartFacade, Cart, OrderEntry } from '@spartacus/cart/base/root';
 import { combineLatest, Observable, Subscription } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
-import { OrderEntry } from '@spartacus/core';
 @Component({
   selector: 'cx-delivery-pickup-options-dialog.component',
   templateUrl: './delivery-pickup-options-dialog.component.html',
@@ -31,7 +26,7 @@ export class DeliveryPickupOptionsDialogComponent implements OnInit, OnDestroy {
   cart$: Observable<Cart>;
 
   constructor(
-    protected activeCartService: ActiveCartService,
+    protected activeCartService: ActiveCartFacade,
     protected authService: AuthService,
     protected routingService: RoutingService,
     protected launchDialogService: LaunchDialogService,

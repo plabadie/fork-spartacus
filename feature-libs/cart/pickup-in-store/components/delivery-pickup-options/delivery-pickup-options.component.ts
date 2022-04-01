@@ -12,14 +12,13 @@ import {
 import { Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
 import {
-  CartItemContext,
-  CartItemContextSource,
   CurrentProductService,
   LaunchDialogService,
   LAUNCH_CALLER,
 } from '@spartacus/storefront';
 import { ICON_TYPE } from '@spartacus/storefront';
-import { OrderEntry } from '@spartacus/core';
+import { CartItemContextSource } from '@spartacus/cart/base/components';
+import { CartItemContext, OrderEntry } from '@spartacus/cart/base/root';
 @Component({
   selector: 'cx-delivery-pickup-options',
   templateUrl: './delivery-pickup-options.component.html',
