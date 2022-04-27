@@ -107,7 +107,10 @@
     "dev:cds:ssr": "cross-env NODE_TLS_REJECT_UNAUTHORIZED=0 SPARTACUS_CDS=true ng run storefrontapp:serve-ssr",
     "prerender:cds:dev": "cross-env NODE_TLS_REJECT_UNAUTHORIZED=0 SPARTACUS_CDS=true ng run storefrontapp:prerender --routesFile projects/storefrontapp/prerender.txt"
   },
-  "private": false,
+  "private": true,
+  "workspaces": [
+    "feature-libs/asm"
+  ],
   "dependencies": {
     "@angular/animations": "^13.2.0",
     "@angular/common": "^13.2.0",
@@ -152,7 +155,6 @@
     "@angular-eslint/eslint-plugin-template": "^13.0.1",
     "@angular-eslint/schematics": "^13.0.1",
     "@angular-eslint/template-parser": "^13.0.1",
-    "@angular/cdk": "~13.3.0",
     "@angular/cli": "^13.2.0",
     "@angular/compiler-cli": "^13.2.0",
     "@angular/language-service": "^13.2.0",
@@ -173,10 +175,6 @@
     "@types/shelljs": "^0.8.7",
     "@typescript-eslint/eslint-plugin": "^5.12.0",
     "@typescript-eslint/parser": "^5.12.0",
-    "@fundamental-ngx/core": "^0.33.7",
-    "@fundamental-ngx/fn": "^0.33.7",
-    "@sap-theming/theming-base-content": "11.1.38",
-    "fundamental-styles": "v0.21.0-rc.92",
     "chalk": "^4.1.0",
     "commander": "^3.0.0",
     "concurrently": "^5.3.0",

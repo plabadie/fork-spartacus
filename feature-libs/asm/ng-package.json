@@ -4,5 +4,12 @@
   "lib": {
     "entryFile": "./public_api.ts"
   },
-  "assets": ["**/*.scss", "schematics/**/*.json", "schematics/**/*.js"]
+  "assets": ["**/*.scss", "schematics/**/*.json", "schematics/**/*.js"],
+  "allowedNonPeerDependencies": [
+    "@angular/cdk",
+    "@fundamental-ngx/core",
+    "@fundamental-ngx/fn",
+    "@sap-theming/theming-base-content",
+    "fundamental-styles"
+  ]
 }

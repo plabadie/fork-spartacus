@@ -201,7 +201,6 @@
     <ng-option
       *ngFor="let group of customerListsPage?.userGroups; first as first"
       [value]="group.uid"
-      [selected]="first"
     >
       {{ group.name }}
     </ng-option>
