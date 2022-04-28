@@ -6,7 +6,7 @@ import {
   UnitTestTree,
 } from '@angular-devkit/schematics/testing';
 import * as shx from 'shelljs';
-
+/**
 import {
   CMS_GET_COMPONENT_FROM_PAGE,
   COMPONENTS_SELECTOR_FACTORY_NEW_API,
@@ -20,13 +20,15 @@ import {
   LOAD_CMS_COMPONENT_FAIL_CLASS,
   LOAD_CMS_COMPONENT_SUCCESS_CLASS,
 } from '../../../shared/constants';
+ */
 
 import { runMigration, writeFile } from '../../../shared/utils/test-utils';
-import { buildMethodComment } from './methods-and-properties-deprecations';
+// import { buildMethodComment } from './methods-and-properties-deprecations';
 
 const MIGRATION_SCRIPT_NAME =
   'migration-v2-methods-and-properties-deprecations-02';
 
+ /**
 const GET_COMPONENT_STATE_TEST_CLASS = `
     import { MemoizedSelector, select, Store } from '@ngrx/store';
     import {
@@ -157,7 +159,6 @@ const CMS_COMPONENT_ACTIONS_TEST_CLASS = `
       }
     }
 `;
-
 const CMS_COMPONENT_ACTIONS_TEST_TWO_CLASSES = `
     import { CmsActions } from '@spartacus/core';
     export class Test1 {
@@ -172,8 +173,9 @@ const CMS_COMPONENT_ACTIONS_TEST_TWO_CLASSES = `
       }
     }
 `;
+*/
 
-const OCC_CONFIGURATOR_VARIANT_NORMALIZER_TEST_CLASS = `
+const OCC_CONFIGURATOR_VARIANT_NORMALIZER = `
   import { OccConfig, TranslationService } from '@spartacus/core';
   import { ConfiguratorUISettingsConfig } from '../../../components/config/configurator-ui-settings.config';
 
@@ -184,7 +186,72 @@ const OCC_CONFIGURATOR_VARIANT_NORMALIZER_TEST_CLASS = `
     protected uiSettingsConfig: ConfiguratorUISettingsConfig
   ) {}
 
-    // TODO:Spartacus - Method 'convertAttributeType' got new parameter 'sourceAttribute' instead of 'type'.
+    convertAttributeType(
+    sourceAttribute: OccConfigurator.Attribute
+    ): Configurator.UiType {
+      let uiType: Configurator.UiType;
+      switch (sourceAttribute.type) {
+        case OccConfigurator.UiType.RADIO_BUTTON: {
+          uiType = Configurator.UiType.RADIOBUTTON;
+          break;
+        }
+        case OccConfigurator.UiType.DROPDOWN: {
+          uiType = Configurator.UiType.DROPDOWN;
+          break;
+        }
+        case OccConfigurator.UiType.STRING: {
+          uiType = Configurator.UiType.STRING;
+          break;
+        }
+        case OccConfigurator.UiType.NUMERIC: {
+          uiType = Configurator.UiType.NUMERIC;
+          break;
+        }
+        case OccConfigurator.UiType.READ_ONLY: {
+          uiType =
+            !sourceAttribute.retractBlocked &&
+            this.hasSourceAttributeConflicts(sourceAttribute)
+              ? Configurator.UiType.RADIOBUTTON
+              : Configurator.UiType.READ_ONLY;
+          break;
+        }
+        case OccConfigurator.UiType.CHECK_BOX_LIST: {
+          uiType = Configurator.UiType.CHECKBOXLIST;
+          break;
+        }
+        case OccConfigurator.UiType.CHECK_BOX: {
+          uiType = Configurator.UiType.CHECKBOX;
+          break;
+        }
+        case OccConfigurator.UiType.MULTI_SELECTION_IMAGE: {
+          uiType = Configurator.UiType.MULTI_SELECTION_IMAGE;
+          break;
+        }
+        case OccConfigurator.UiType.SINGLE_SELECTION_IMAGE: {
+          uiType = Configurator.UiType.SINGLE_SELECTION_IMAGE;
+          break;
+        }
+        default: {
+          uiType = Configurator.UiType.NOT_IMPLEMENTED;
+        }
+      }
+      return uiType;
+    }
+  }
+}`;
+
+const OCC_CONFIGURATOR_VARIANT_NORMALIZER_WITH_COMMENT = `
+  import { OccConfig, TranslationService } from '@spartacus/core';
+  import { ConfiguratorUISettingsConfig } from '../../../components/config/configurator-ui-settings.config';
+
+  export class OccConfiguratorVariantNormalizer {
+    constructor(
+    protected config: OccConfig,
+    protected translation: TranslationService,
+    protected uiSettingsConfig: ConfiguratorUISettingsConfig
+  ) {}
+
+// TODO:Spartacus - Method 'convertAttributeType' got new parameter 'sourceAttribute' instead of 'type'.
     convertAttributeType(
     sourceAttribute: OccConfigurator.Attribute
     ): Configurator.UiType {
@@ -297,15 +364,17 @@ describe('updateCmsComponentState migration', () => {
     writeFile(
       host,
       '/src/index.ts',
-      OCC_CONFIGURATOR_VARIANT_NORMALIZER_TEST_CLASS
+      OCC_CONFIGURATOR_VARIANT_NORMALIZER
     );
 
     await runMigration(appTree, schematicRunner, MIGRATION_SCRIPT_NAME);
 
     const content = appTree.readContent('/src/index.ts');
-    expect(content).toEqual(OCC_CONFIGURATOR_VARIANT_NORMALIZER_TEST_CLASS);
+    console.log(content);
+    expect(content).toEqual(OCC_CONFIGURATOR_VARIANT_NORMALIZER_WITH_COMMENT);
   });
 
+  /**
   it('getComponentState', async () => {
     writeFile(host, '/src/index.ts', GET_COMPONENT_STATE_TEST_CLASS);
 
@@ -451,4 +520,5 @@ describe('updateCmsComponentState migration', () => {
       .length;
     expect(spartacusToDoOccurrences).toEqual(2);
   });
+   */
 });
