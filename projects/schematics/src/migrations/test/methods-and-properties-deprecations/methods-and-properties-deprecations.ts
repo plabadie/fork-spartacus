@@ -3,10 +3,12 @@ import { MethodPropertyDeprecation } from '../../../shared/utils/file-utils';
 import { migrateMethodPropertiesDeprecation } from '../../mechanism/methods-and-properties-deprecations/methods-and-properties-deprecations';
 import { CMS_ACTIONS_MIGRATION } from './data/cms-group.actions.migration';
 import { CMS_SELECTORS_MIGRATION } from './data/cms-group.selectors.migration';
+import { OCC_CONFIGURATOR_VARIANT_NORMALIZER_MIGRATION } from './data/occ-configurator-variant-normalizer.migration';
 
 export const METHOD_PROPERTY_DATA: MethodPropertyDeprecation[] = [
   ...CMS_SELECTORS_MIGRATION,
   ...CMS_ACTIONS_MIGRATION,
+  ...OCC_CONFIGURATOR_VARIANT_NORMALIZER_MIGRATION,
 ];
 
 export function migrate(): Rule {
