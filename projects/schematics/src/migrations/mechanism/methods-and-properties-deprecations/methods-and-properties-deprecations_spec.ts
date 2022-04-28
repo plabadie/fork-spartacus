@@ -173,9 +173,10 @@ const CMS_COMPONENT_ACTIONS_TEST_TWO_CLASSES = `
 
 const OCC_CONFIGURATOR_VARIANT_NORMALIZER = `
   import { OccConfig, TranslationService } from '@spartacus/core';
-  import { ConfiguratorUISettingsConfig } from '../../../components/config/configurator-ui-settings.config';
+  import { ConfiguratorUISettingsConfig } from '@spartacus/product-configurator/rulebased';
+  import { OccConfiguratorVariantNormalizer } from '@spartacus/product-configurator/rulebased';
 
-  export class OccConfiguratorVariantNormalizer {
+  export class InheritingService extends OccConfiguratorVariantNormalizer {
     constructor(
     protected config: OccConfig,
     protected translation: TranslationService,
@@ -238,9 +239,10 @@ const OCC_CONFIGURATOR_VARIANT_NORMALIZER = `
 
 const OCC_CONFIGURATOR_VARIANT_NORMALIZER_WITH_COMMENT = `
   import { OccConfig, TranslationService } from '@spartacus/core';
-  import { ConfiguratorUISettingsConfig } from '../../../components/config/configurator-ui-settings.config';
+  import { ConfiguratorUISettingsConfig } from '@spartacus/product-configurator/rulebased';
+  import { OccConfiguratorVariantNormalizer } from '@spartacus/product-configurator/rulebased';
 
-  export class OccConfiguratorVariantNormalizer {
+  export class InheritingService extends OccConfiguratorVariantNormalizer {
     constructor(
     protected config: OccConfig,
     protected translation: TranslationService,
