@@ -6,7 +6,6 @@ import {
   UnitTestTree,
 } from '@angular-devkit/schematics/testing';
 import * as shx from 'shelljs';
-/**
 import {
   CMS_GET_COMPONENT_FROM_PAGE,
   COMPONENTS_SELECTOR_FACTORY_NEW_API,
@@ -20,15 +19,13 @@ import {
   LOAD_CMS_COMPONENT_FAIL_CLASS,
   LOAD_CMS_COMPONENT_SUCCESS_CLASS,
 } from '../../../shared/constants';
- */
 
 import { runMigration, writeFile } from '../../../shared/utils/test-utils';
-// import { buildMethodComment } from './methods-and-properties-deprecations';
+import { buildMethodComment } from './methods-and-properties-deprecations';
 
 const MIGRATION_SCRIPT_NAME =
   'migration-v2-methods-and-properties-deprecations-02';
 
- /**
 const GET_COMPONENT_STATE_TEST_CLASS = `
     import { MemoizedSelector, select, Store } from '@ngrx/store';
     import {
@@ -173,7 +170,6 @@ const CMS_COMPONENT_ACTIONS_TEST_TWO_CLASSES = `
       }
     }
 `;
-*/
 
 const OCC_CONFIGURATOR_VARIANT_NORMALIZER = `
   import { OccConfig, TranslationService } from '@spartacus/core';
@@ -361,11 +357,7 @@ describe('updateCmsComponentState migration', () => {
   });
 
   it('should add comments to OCC configurator variant normalizer', async () => {
-    writeFile(
-      host,
-      '/src/index.ts',
-      OCC_CONFIGURATOR_VARIANT_NORMALIZER
-    );
+    writeFile(host, '/src/index.ts', OCC_CONFIGURATOR_VARIANT_NORMALIZER);
 
     await runMigration(appTree, schematicRunner, MIGRATION_SCRIPT_NAME);
 
@@ -374,7 +366,6 @@ describe('updateCmsComponentState migration', () => {
     expect(content).toEqual(OCC_CONFIGURATOR_VARIANT_NORMALIZER_WITH_COMMENT);
   });
 
-  /**
   it('getComponentState', async () => {
     writeFile(host, '/src/index.ts', GET_COMPONENT_STATE_TEST_CLASS);
 
@@ -520,5 +511,4 @@ describe('updateCmsComponentState migration', () => {
       .length;
     expect(spartacusToDoOccurrences).toEqual(2);
   });
-   */
 });
