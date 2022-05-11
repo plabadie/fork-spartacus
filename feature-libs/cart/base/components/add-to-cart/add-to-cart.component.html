@@ -19,7 +19,15 @@
     </div>
   </div>
 
-  <ng-template [cxOutlet]="CartOutlets.PICKUP_IN_STORE_OPTION"></ng-template>
+  <!--  <ng-template [cxOutlet]="CartOutlets.PICKUP_IN_STORE_OPTION"></ng-template>-->
+  <ng-container
+    [cxComponentWrapper]="{
+      flexType: 'PickupInStoreDeliveryOptionsComponent',
+      typeCode: 'PickupInStoreDeliveryOptionsComponent',
+      uid: 'PickupInStoreDeliveryOptionsComponent'
+    }"
+  >
+  </ng-container>
 
   <button
     *ngIf="hasStock"
