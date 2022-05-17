@@ -1,0 +1,242 @@
+<ng-container *ngIf="quotes$ | async as quotes">
+  <ng-container *ngIf="!(isLoading$ | async); else loading">
+    <div role="status" [attr.aria-label]="'common.loaded' | cxTranslate"></div>
+    <div>
+      <h2>
+        {{ 'commerceQuotesList.header' | cxTranslate }}
+      </h2>
+    </div>
+    <ng-container *ngIf="quotes.quotes.length > 0; else emptyQuotes">
+      <div class="cx-order-history-sort top">
+        <label class="cx-commerce-quotes-list-form-group form-group"
+          ><span>
+            {{ 'orderHistory.sortBy' | cxTranslate }}
+          </span>
+          <cx-sorting
+            [sortOptions]="quotes.sorts"
+            [sortLabels]="getSortLabels() | async"
+            (sortListEvent)="changeSortCode($event)"
+            [selectedOption]="quotes.pagination.sort"
+            placeholder="{{ 'orderHistory.sortBy' | cxTranslate }}"
+            [ariaLabel]="'orderHistory.sortOrders' | cxTranslate"
+            ariaControls="order-history-table"
+          ></cx-sorting>
+        </label>
+        <div
+          *ngIf="quotes.pagination.totalPages > 1"
+          class="cx-order-history-pagination"
+        >
+          <cx-pagination
+            [pagination]="quotes.pagination"
+            (viewPageEvent)="pageChange($event)"
+          ></cx-pagination>
+        </div>
+      </div>
+      <table role="table">
+        <thead>
+          <tr role="row">
+            <th scope="col">
+              {{ 'commerceQuotesList.quoteName' | cxTranslate }}
+            </th>
+            <th scope="col">
+              {{ 'commerceQuotesList.quoteId' | cxTranslate }}
+            </th>
+            <th scope="col">
+              {{ 'commerceQuotesList.quoteStatus' | cxTranslate }}
+            </th>
+            <th scope="col">
+              {{ 'commerceQuotesList.quoteUpdated' | cxTranslate }}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let quote of quotes.quotes"
+            (click)="goToSavedCartDetails(savedCart)"
+          >
+            <td class="cx-commerce-quotes-list-quote-name">
+              <div class="cx-mobile-header">
+                {{ 'commerceQuotesList.quoteName' | cxTranslate }}
+              </div>
+              <a
+                [routerLink]="
+                  {
+                    cxRoute: 'quoteDetails',
+                    params: { quoteId: quote?.code }
+                  } | cxUrl
+                "
+              >
+                {{ quote?.name }}</a
+              >
+            </td>
+            <td>
+              <div class="cx-mobile-header">
+                {{ 'commerceQuotesList.quoteId' | cxTranslate }}
+              </div>
+              <a
+                [routerLink]="
+                  {
+                    cxRoute: 'quoteDetails',
+                    params: { quoteId: quote?.code }
+                  } | cxUrl
+                "
+                >{{ quote?.code }}</a
+              >
+            </td>
+            <td>
+              <div class="cx-mobile-header">
+                {{ 'commerceQuotesList.quoteStatus' | cxTranslate }}
+              </div>
+              <a
+                [routerLink]="
+                  {
+                    cxRoute: 'quoteDetails',
+                    params: { savedCartId: savedCart?.code }
+                  } | cxUrl
+                "
+                >{{ quote?.state }}</a
+              >
+            </td>
+            <td>
+              <div class="cx-mobile-header">
+                {{ 'commerceQuotesList.quoteUpdated' | cxTranslate }}
+              </div>
+              <a
+                [routerLink]="
+                  {
+                    cxRoute: 'quoteDetails',
+                    params: { savedCartId: savedCart?.code }
+                  } | cxUrl
+                "
+              >
+                {{ quote?.updatedTime | cxDate }}</a
+              >
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="cx-order-history-sort bottom">
+        <div
+          *ngIf="quotes.pagination.totalPages > 1"
+          class="cx-order-history-pagination"
+        >
+          <cx-pagination
+            [pagination]="quotes.pagination"
+            (viewPageEvent)="pageChange($event)"
+          ></cx-pagination>
+        </div>
+      </div>
+    </ng-container>
+  </ng-container>
+</ng-container>
+
+<ng-template #emptyWishList>
+  <h2>{{ 'wishlist.empty' | cxTranslate }}</h2>
+</ng-template>
+
+<!-- <ng-container *ngIf="quotes$ | async as quotes">
+  <ng-container *ngIf="!(isLoading$ | async); else loading">
+    <div role="status" [attr.aria-label]="'common.loaded' | cxTranslate"></div>
+    <div class="cx-commerce-quotes-list-header">
+      <h3>
+        {{
+          'commerceQuotesList.header' | cxTranslate
+        }}
+      </h3>
+    </div>
+
+    <ng-container *ngIf="quotes.length > 0; else emptyQuotes">
+      <table role="table" class="table cx-commerce-quotes-list-table">
+        <thead>
+          <tr role="row" class="cx-commerce-quotes-list-thead-mobile">
+            <th scope="col">
+              {{ 'commerceQuotesList.quoteName' | cxTranslate }}
+            </th>
+            <th scope="col">
+              {{ 'commerceQuotesList.quoteId' | cxTranslate }}
+            </th>
+            <th scope="col">
+              {{ 'commerceQuotesList.quoteStatus' | cxTranslate }}
+            </th>
+            <th scope="col">
+              {{ 'commerceQuotesList.quoteUpdated' | cxTranslate }}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let quote of quotes"
+            (click)="goToSavedCartDetails(savedCart)"
+          >
+            <td class="cx-commerce-quotes-list-quote-name">
+              <div class="cx-table-label-mobile cx-commerce-quotes-list-label">
+                {{ 'commerceQuotesList.quoteName' | cxTranslate }}
+              </div>
+              <a
+                [routerLink]="
+                  {
+                    cxRoute: 'quoteDetails',
+                    params: { quoteId: quote?.code }
+                  } | cxUrl
+                "
+                class="cx-commerce-quotes-list-value"
+              >
+                {{ quote?.name }}</a
+              >
+            </td>
+            <td class="cx-commerce-quotes-list-cart-id">
+              <div class="cx-table-label-mobile cx-commerce-quotes-list-label">
+                {{ 'commerceQuotesList.quoteId' | cxTranslate }}
+              </div>
+              <a
+                [routerLink]="
+                  {
+                    cxRoute: 'quoteDetails',
+                    params: { quoteId: quote?.code }
+                  } | cxUrl
+                "
+                class="cx-commerce-quotes-list-value"
+                >{{ quote?.code }}</a
+              >
+            </td>
+            <td class="cx-commerce-quotes-list-date-saved">
+              <div class="cx-table-label-mobile cx-commerce-quotes-list-label">
+                {{ 'commerceQuotesList.quoteStatus' | cxTranslate }}
+              </div>
+              <a
+                [routerLink]="
+                  {
+                    cxRoute: 'quoteDetails',
+                    params: { savedCartId: savedCart?.code }
+                  } | cxUrl
+                "
+                class="cx-commerce-quotes-list-value"
+                >{{ quote?.state }}</a
+              >
+            </td>
+            <td class="cx-commerce-quotes-list-quantity">
+              <div class="cx-table-label-mobile cx-commerce-quotes-list-label">
+                {{ 'commerceQuotesList.quoteUpdated' | cxTranslate }}
+              </div>
+              <a
+                [routerLink]="
+                  {
+                    cxRoute: 'quoteDetails',
+                    params: { savedCartId: savedCart?.code }
+                  } | cxUrl
+                "
+                class="cx-commerce-quotes-list-value"
+              >
+                {{ quote?.updatedTime | cxDate }}</a
+              >
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </ng-container>
+  </ng-container>
+</ng-container>
+
+<ng-template #emptyWishList>
+  <h2>{{ 'wishlist.empty' | cxTranslate }}</h2>
+</ng-template> -->
