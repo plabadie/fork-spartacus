@@ -3,7 +3,7 @@ import { TempScopedNodeJsSyncHost } from '@angular-devkit/core/node/testing';
 import { HostTree, Tree } from '@angular-devkit/schematics';
 import {
   SchematicTestRunner,
-  UnitTestTree,
+  UnitTestTree
 } from '@angular-devkit/schematics/testing';
 import * as shx from 'shelljs';
 import {
@@ -17,7 +17,7 @@ import {
   GET_COMPONENT_STATE_OLD_API,
   LOAD_CMS_COMPONENT_CLASS,
   LOAD_CMS_COMPONENT_FAIL_CLASS,
-  LOAD_CMS_COMPONENT_SUCCESS_CLASS,
+  LOAD_CMS_COMPONENT_SUCCESS_CLASS
 } from '../../../shared/constants';
 import { runMigration, writeFile } from '../../../shared/utils/test-utils';
 import { buildMethodComment } from './methods-and-properties-deprecations';
@@ -170,6 +170,31 @@ const CMS_COMPONENT_ACTIONS_TEST_TWO_CLASSES = `
     }
 `;
 
+const STOREFRONTUTIL = `
+  import { ConfiguratorStorefrontUtilsService } from '@spartacus/product-configurator/rulebased';
+  export class InheritingService extends ConfiguratorStorefrontUtilsService {
+    constructor() {
+      super();
+    }
+    isInViewport(element: Element): boolean {
+
+    }
+  }
+}`;
+
+const STOREFRONTUTIL_WITH_COMMENT = `
+  import { ConfiguratorStorefrontUtilsService } from '@spartacus/product-configurator/rulebased';
+  export class InheritingService extends ConfiguratorStorefrontUtilsService {
+    constructor() {
+      super();
+    }
+// TODO:Spartacus - Method 'ConfiguratorStorefrontUtilsService.isInViewport' was removed. It is not needed anymore as scrolling is always executed on navigation regardless of position of element.
+    isInViewport(element: Element): boolean {
+
+    }
+  }
+}`;
+
 describe('updateCmsComponentState migration', () => {
   let host: TempScopedNodeJsSyncHost;
   let appTree = Tree.empty() as UnitTestTree;
@@ -223,6 +248,11 @@ describe('updateCmsComponentState migration', () => {
     shx.cd(previousWorkingDir);
     shx.rm('-r', tmpDirPath);
   });
+
+
+
+
+
 
   it('getComponentState', async () => {
     writeFile(host, '/src/index.ts', GET_COMPONENT_STATE_TEST_CLASS);
@@ -369,4 +399,17 @@ describe('updateCmsComponentState migration', () => {
       .length;
     expect(spartacusToDoOccurrences).toEqual(2);
   });
+
+  it('should add comments to storefront util service', async () => {
+    writeFile(host, '/src/index.ts', STOREFRONTUTIL);
+
+    await runMigration(appTree, schematicRunner, MIGRATION_SCRIPT_NAME);
+
+    const content = appTree.readContent('/src/index.ts');
+    expect(content).toEqual(
+      STOREFRONTUTIL_WITH_COMMENT
+    );
+  });
+
+
 });
