@@ -6,9 +6,11 @@ import { I18nModule, provideConfig } from '@spartacus/core';
 import {
   FormErrorsModule,
   IconModule,
+  KeyboardFocusModule,
   ModalModule,
   PasswordVisibilityToggleModule,
   PopoverModule,
+  SpinnerModule,
 } from '@spartacus/storefront';
 import { AsmMainUiComponent } from './asm-main-ui/asm-main-ui.component';
 import { AsmSessionTimerComponent } from './asm-session-timer/asm-session-timer.component';
@@ -16,6 +18,7 @@ import { FormatTimerPipe } from './asm-session-timer/format-timer.pipe';
 import { AsmToggleUiComponent } from './asm-toggle-ui/asm-toggle-ui.component';
 import { CSAgentLoginFormComponent } from './csagent-login-form/csagent-login-form.component';
 import { CustomerEmulationComponent } from './customer-emulation/customer-emulation.component';
+import { CustomerListComponent } from './customer-list/customer-list.component';
 import { CustomerSelectionComponent } from './customer-selection/customer-selection.component';
 import { defaultAsmLayoutConfig } from './default-asm-layout.config';
 
@@ -25,16 +28,19 @@ import { defaultAsmLayoutConfig } from './default-asm-layout.config';
     ReactiveFormsModule,
     I18nModule,
     FormErrorsModule,
-    PasswordVisibilityToggleModule,
     IconModule,
-    PopoverModule,
     ModalModule,
     NgSelectModule,
     FormsModule,
+    SpinnerModule,
+    PasswordVisibilityToggleModule,
+    PopoverModule,
+    KeyboardFocusModule,
   ],
   declarations: [
     AsmMainUiComponent,
     CSAgentLoginFormComponent,
+    CustomerListComponent,
     CustomerSelectionComponent,
     AsmSessionTimerComponent,
     FormatTimerPipe,
@@ -44,6 +50,7 @@ import { defaultAsmLayoutConfig } from './default-asm-layout.config';
   exports: [
     AsmMainUiComponent,
     CSAgentLoginFormComponent,
+    CustomerListComponent,
     CustomerSelectionComponent,
     AsmSessionTimerComponent,
     FormatTimerPipe,

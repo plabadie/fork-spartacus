@@ -193,6 +193,18 @@ context('Assisted Service Module', () => {
     // TODO(#9445): Add e2e test for this scenario
     it.skip('agent logout when user was logged and emulated should restore the session', () => {});
   });
+
+  describe('Customer list', () => {
+    it('checking custom list features', () => {
+      checkout.visitHomePage('asm=true');
+      cy.get('cx-asm-main-ui').should('exist');
+      cy.get('cx-asm-main-ui').should('be.visible');
+
+      asm.agentLogin();
+      asm.asmCustomerLists();
+      asm.agentSignOut();
+    });
+  });
 });
 
 /*

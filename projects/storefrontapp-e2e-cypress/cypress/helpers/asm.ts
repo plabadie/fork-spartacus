@@ -23,8 +23,16 @@ export function listenForAuthenticationRequest(): string {
 
 export function listenForCustomerSearchRequest(): string {
   return interceptGet(
-    'customerSearch',
+    'customerLists',
     '/assistedservicewebservices/customers/search?*',
+    false
+  );
+}
+
+export function listenForCustomerListsRequest(): string {
+  return interceptGet(
+    'customerSearch',
+    '/assistedservicewebservices/customerlists?*',
     false
   );
 }
@@ -56,6 +64,116 @@ export function agentLogin(): void {
   cy.wait(authRequest);
   cy.get('cx-csagent-login-form').should('not.exist');
   cy.get('cx-customer-selection').should('exist');
+}
+
+export function asmOpenCustomerList(): void {
+  cy.get('cx-asm-main-ui div.asm-customer-list a').click();
+  cy.get('cx-customer-list').should('exist');
+  cy.get('cx-customer-list h2').should('exist');
+}
+
+export function asmCustomerLists(): void {
+  const customerListsRequestAlias = asm.listenForCustomerListsRequest();
+  const customerSearchRequestAlias = asm.listenForCustomerSearchRequest();
+  const userDetailsRequestAlias = listenForUserDetailsRequest();
+
+  cy.log('--> Starting customer list');
+  asm.asmOpenCustomerList();
+
+  cy.wait(customerListsRequestAlias)
+    .its('response.statusCode')
+    .should('eq', 200);
+
+  cy.wait(customerSearchRequestAlias)
+    .its('response.statusCode')
+    .should('eq', 200);
+
+  cy.get('cx-customer-list table').should('exist');
+
+  cy.log('--> checking customer list pagination');
+  cy.get('cx-customer-list .btn-previous').should('be.disabled');
+  cy.get('cx-customer-list .btn-next').then((button) => {
+    cy.wrap(button).click();
+    cy.wait(customerSearchRequestAlias)
+      .its('response.statusCode')
+      .should('eq', 200);
+  });
+  cy.get('cx-customer-list .btn-previous').should('not.be.disabled');
+  cy.get('cx-customer-list .btn-previous').then((button) => {
+    cy.wrap(button).click();
+    cy.wait(customerSearchRequestAlias)
+      .its('response.statusCode')
+      .should('eq', 200);
+  });
+
+  cy.log('--> checking customer list sorting');
+  cy.get('cx-customer-list ng-select.sort-selector').then((selects) => {
+    let select = selects[0];
+    cy.wrap(select)
+      .click()
+      .get('ng-dropdown-panel')
+      .get('.ng-option')
+      .eq(1)
+      .then((item) => {
+        cy.wrap(item).click();
+        cy.wait(customerSearchRequestAlias)
+          .its('response.statusCode')
+          .should('eq', 200);
+      });
+  });
+  cy.log('--> checking customer list group');
+  cy.get('cx-customer-list ng-select.customer-list-selector').then(
+    (selects) => {
+      let select = selects[0];
+      cy.wrap(select)
+        .click()
+        .get('ng-dropdown-panel')
+        .get('.ng-option')
+        .eq(1)
+        .then((item) => {
+          cy.wrap(item).click();
+          cy.wait(customerSearchRequestAlias)
+            .its('response.statusCode')
+            .should('eq', 200);
+        });
+    }
+  );
+
+  cy.get('cx-customer-list button.close').click();
+  cy.get('cx-customer-list').should('not.exist');
+
+  cy.log('--> start emulation by click name');
+  asm.asmOpenCustomerList();
+
+  cy.wait(customerSearchRequestAlias)
+    .its('response.statusCode')
+    .should('eq', 200);
+
+  cy.get('cx-customer-list')
+    .find('.btn-cell')
+    .not('[aria-label="Order"]')
+    .then(($rows) => {
+      expect($rows.length).to.eq(5);
+      cy.wrap($rows[0]).click();
+      cy.get('cx-customer-list').should('not.exist');
+    });
+  cy.wait(userDetailsRequestAlias);
+  cy.get('cx-customer-emulation input')
+    .invoke('attr', 'placeholder')
+    .should('not.be.empty');
+  cy.get('cx-customer-emulation').should('exist');
+
+  cy.log('--> start emulation by click order');
+  asm.asmOpenCustomerList();
+  cy.get('cx-customer-list')
+    .find('.btn-cell')
+    .filter('[aria-label="Order"]')
+    .then(($rows) => {
+      expect($rows.length).to.eq(5);
+      cy.wrap($rows[0]).click();
+      cy.get('cx-customer-list').should('not.exist');
+      cy.get('cx-order-history').should('exist');
+    });
 }
 
 export function startCustomerEmulation(customer): void {

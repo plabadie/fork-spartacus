@@ -1,6 +1,9 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
 import { AsmService, AsmUi } from '@spartacus/asm/core';
-import { CsAgentAuthService } from '@spartacus/asm/root';
+import {
+  CsAgentAuthService,
+  CustomerListColumnActionType,
+} from '@spartacus/asm/root';
 import {
   AuthService,
   GlobalMessageService,
@@ -9,10 +12,18 @@ import {
   User,
   UserService,
 } from '@spartacus/core';
+import { ICON_TYPE, ModalRef, ModalService } from '@spartacus/storefront';
 import { Observable, of } from 'rxjs';
-import { map, switchMap, take } from 'rxjs/operators';
+import {
+  distinctUntilChanged,
+  map,
+  switchMap,
+  take,
+  tap,
+} from 'rxjs/operators';
+import { CustomerListComponent } from '../customer-list/customer-list.component';
+import { CustomerListActionEvent } from '../customer-list/customer-list.model';
 import { AsmComponentService } from '../services/asm-component.service';
-
 @Component({
   selector: 'cx-asm-main-ui',
   templateUrl: './asm-main-ui.component.html',
@@ -22,10 +33,13 @@ export class AsmMainUiComponent implements OnInit {
   csAgentTokenLoading$: Observable<boolean>;
   customer$: Observable<User | undefined>;
   isCollapsed$: Observable<boolean>;
+  iconTypes = ICON_TYPE;
 
   @HostBinding('class.hidden') disabled = false;
 
   protected startingCustomerSession = false;
+
+  protected modalRef: ModalRef | null;
 
   constructor(
     protected authService: AuthService,
@@ -34,12 +48,22 @@ export class AsmMainUiComponent implements OnInit {
     protected asmComponentService: AsmComponentService,
     protected globalMessageService: GlobalMessageService,
     protected routingService: RoutingService,
-    protected asmService: AsmService
+    protected asmService: AsmService,
+    protected modalService: ModalService
   ) {}
 
   ngOnInit(): void {
-    this.customerSupportAgentLoggedIn$ =
-      this.csAgentAuthService.isCustomerSupportAgentLoggedIn();
+    this.customerSupportAgentLoggedIn$ = this.csAgentAuthService
+      .isCustomerSupportAgentLoggedIn()
+      .pipe(
+        distinctUntilChanged(),
+        tap((loggedIn) => {
+          if (!loggedIn) {
+            this.closeModal();
+          }
+        })
+      );
+
     this.csAgentTokenLoading$ =
       this.csAgentAuthService.getCustomerSupportAgentTokenLoading();
     this.customer$ = this.authService.isUserLoggedIn().pipe(
@@ -103,5 +127,33 @@ export class AsmMainUiComponent implements OnInit {
   hideUi(): void {
     this.disabled = true;
     this.asmComponentService.unload();
+  }
+
+  showCustomList(): void {
+    this.modalRef = this.modalService.open(CustomerListComponent, {
+      centered: true,
+      size: 'mf',
+      windowClass: 'fiori-like',
+    });
+    this.modalRef.result
+      .then(({ selectedUser, actionType }: CustomerListActionEvent) => {
+        if (selectedUser) {
+          this.startCustomerEmulationSession(selectedUser);
+          if (actionType === CustomerListColumnActionType.ORDER_HISTORY) {
+            this.routingService.go({ cxRoute: 'orders' });
+          }
+        }
+        this.modalRef = null;
+      })
+      .catch(() => {
+        // this  callback is called when modal is closed with Esc key or clicking backdrop
+        this.modalRef = null;
+      });
+  }
+
+  closeModal(): void {
+    if (this.modalService.getActiveModal() === this.modalRef) {
+      this.modalService.closeActiveModal();
+    }
   }
 }

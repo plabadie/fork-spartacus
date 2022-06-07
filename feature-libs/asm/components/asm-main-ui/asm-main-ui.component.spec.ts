@@ -5,10 +5,19 @@ import {
   Input,
   Output,
 } from '@angular/core';
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import {
+  ComponentFixture,
+  fakeAsync,
+  TestBed,
+  tick,
+  waitForAsync,
+} from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { AsmService, AsmUi } from '@spartacus/asm/core';
-import { CsAgentAuthService } from '@spartacus/asm/root';
+import {
+  CsAgentAuthService,
+  CustomerListColumnActionType,
+} from '@spartacus/asm/root';
 import {
   AuthService,
   GlobalMessageService,
@@ -17,7 +26,9 @@ import {
   User,
   UserService,
 } from '@spartacus/core';
+import { ModalRef, ModalService } from '@spartacus/storefront';
 import { Observable, of } from 'rxjs';
+import { CustomerListComponent } from '../customer-list/customer-list.component';
 import { AsmComponentService } from '../services/asm-component.service';
 import { AsmMainUiComponent } from './asm-main-ui.component';
 
@@ -43,6 +54,27 @@ class MockCsAgentAuthService implements Partial<CsAgentAuthService> {
 class MockUserService implements Partial<UserService> {
   get(): Observable<User> {
     return of({});
+  }
+}
+
+export class MockNgbModalRef {
+  componentInstance = {
+    selectedUserGroupId: '',
+    customerSearchPage$: of({}),
+    customerListsPage$: of({}),
+    selectedCustomer: {},
+    fetchCustomers: () => {},
+    closeModal: (_reason?: any) => {},
+  };
+  result: Promise<any> = new Promise(() => {});
+}
+
+class MockModalService {
+  open() {
+    return new MockNgbModalRef();
+  }
+  getActiveModal() {
+    return new MockNgbModalRef();
   }
 }
 
@@ -120,6 +152,7 @@ describe('AsmMainUiComponent', () => {
   let routingService: RoutingService;
   let asmComponentService: AsmComponentService;
   let asmService: AsmService;
+  let modalService: ModalService;
 
   beforeEach(
     waitForAsync(() => {
@@ -141,6 +174,7 @@ describe('AsmMainUiComponent', () => {
           { provide: RoutingService, useClass: MockRoutingService },
           { provide: AsmComponentService, useClass: MockAsmComponentService },
           { provide: AsmService, useClass: MockAsmService },
+          { provide: ModalService, useClass: MockModalService },
         ],
       }).compileComponents();
     })
@@ -155,6 +189,7 @@ describe('AsmMainUiComponent', () => {
     routingService = TestBed.inject(RoutingService);
     asmComponentService = TestBed.inject(AsmComponentService);
     asmService = TestBed.inject(AsmService);
+    modalService = TestBed.inject(ModalService);
     component = fixture.componentInstance;
     el = fixture.debugElement;
     fixture.detectChanges();
@@ -384,4 +419,28 @@ describe('AsmMainUiComponent', () => {
     submitBtn.nativeElement.dispatchEvent(new MouseEvent('click'));
     expect(asmComponentService.unload).toHaveBeenCalled();
   });
+
+  it('should be able to open dialog', () => {
+    spyOn(modalService, 'open').and.callThrough();
+    component.showCustomList();
+    expect(modalService.open).toHaveBeenCalledWith(
+      CustomerListComponent,
+      Object({ centered: true, size: 'mf', windowClass: 'fiori-like' })
+    );
+  });
+
+  it('should be able to navigate to Order history', fakeAsync(() => {
+    const mockModelRef = new MockNgbModalRef();
+    mockModelRef.result = Promise.resolve({
+      selectedUser: {},
+      actionType: CustomerListColumnActionType.ORDER_HISTORY,
+    });
+
+    spyOn(modalService, 'open').and.returnValue(mockModelRef as ModalRef);
+    spyOn(routingService, 'go').and.callThrough();
+
+    component.showCustomList();
+    tick();
+    expect(routingService.go).toHaveBeenCalledWith({ cxRoute: 'orders' });
+  }));
 });

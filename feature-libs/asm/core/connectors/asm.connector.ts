@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import { BindCartOptions } from '@spartacus/asm/root';
-import { Observable } from 'rxjs';
 import {
+  BindCartOptions,
+  CustomerListsPage,
   CustomerSearchOptions,
   CustomerSearchPage,
-} from '../models/asm.models';
+} from '@spartacus/asm/root';
+import { Observable } from 'rxjs';
 import { AsmAdapter } from './asm.adapter';
 
 @Injectable({
@@ -21,5 +22,9 @@ export class AsmConnector {
 
   bindCart(options: BindCartOptions): Observable<unknown> {
     return this.asmAdapter.bindCart(options);
+  }
+
+  customerLists(): Observable<CustomerListsPage> {
+    return this.asmAdapter.customerLists();
   }
 }

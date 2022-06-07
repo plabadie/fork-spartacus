@@ -17,6 +17,7 @@ export function asmStatePersistenceFactory(
 @NgModule({
   imports: [CommonModule, AsmStoreModule],
   providers: [
+    ...facadeProviders,
     provideDefaultConfig(defaultAsmConfig),
     AsmConnector,
     {
