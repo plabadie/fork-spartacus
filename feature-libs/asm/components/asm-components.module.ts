@@ -8,6 +8,7 @@ import {
   IconModule,
   KeyboardFocusModule,
   ModalModule,
+  NgSelectA11yModule,
   PasswordVisibilityToggleModule,
   PopoverModule,
   SpinnerModule,
@@ -36,6 +37,7 @@ import { defaultAsmLayoutConfig } from './default-asm-layout.config';
     PasswordVisibilityToggleModule,
     PopoverModule,
     KeyboardFocusModule,
+    NgSelectA11yModule,
   ],
   declarations: [
     AsmMainUiComponent,
