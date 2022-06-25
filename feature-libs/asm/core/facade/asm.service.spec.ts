@@ -7,7 +7,7 @@ import {
   CustomerSearchPage,
 } from '@spartacus/asm/root';
 import { QueryState, User } from '@spartacus/core';
-import { NEVER, of } from 'rxjs';
+import { NEVER, Observable, of } from 'rxjs';
 import { AsmUi } from '../models/asm.models';
 import { AsmActions } from '../store/actions/index';
 import { AsmState, ASM_FEATURE } from '../store/asm-state';
@@ -22,6 +22,17 @@ const mockUser: User = {
   uid: 'user@test.com',
   customerId: '123456',
 };
+
+class AsmConnectorMock {
+  customerSearch(
+    _options: CustomerSearchOptions
+  ): Observable<CustomerSearchPage> {
+    return of();
+  }
+  bindCart(_cartId: string, _customerId: string): Observable<unknown> {
+    return of(null);
+  }
+}
 
 const mockCustomerSearchPage: CustomerSearchPage = {
   entries: [mockUser],
@@ -40,6 +51,7 @@ describe('AsmService', () => {
   let service: AsmService;
   let store: Store<AsmState>;
   let asmFacadeService: AsmFacadeService;
+  let asmConnector: AsmConnector;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -50,12 +62,20 @@ describe('AsmService', () => {
       providers: [
         AsmService,
         { provide: AsmFacadeService, useClass: MockAsmFacadeService },
+        {
+          provide: AsmConnector,
+          useClass: AsmConnectorMock,
+        },
       ],
     });
 
     service = TestBed.inject(AsmService);
     store = TestBed.inject(Store);
     asmFacadeService = TestBed.inject(AsmFacadeService);
+    asmConnector = TestBed.inject(AsmConnector);
+
+    spyOn(asmConnector, 'customerSearch').and.stub();
+    spyOn(asmConnector, 'bindCart').and.stub();
   });
 
   it('should be created', () => {

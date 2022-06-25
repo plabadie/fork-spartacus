@@ -7,7 +7,7 @@ import {
   CUSTOMER_SEARCH_PAGE_NORMALIZER,
 } from '@spartacus/asm/core';
 import {
-  BindCartOptions,
+  BindCartParams,
   CustomerListsPage,
   CustomerSearchOptions,
   CustomerSearchPage,
@@ -111,7 +111,7 @@ export class OccAsmAdapter implements AsmAdapter {
       .pipe(this.converterService.pipeable(CUSTOMER_SEARCH_PAGE_NORMALIZER));
   }
 
-  bindCart({ cartId, customerId }: BindCartOptions): Observable<void> {
+  bindCart({ cartId, customerId }: BindCartParams): Observable<unknown> {
     const headers = InterceptorUtil.createHeader(
       USE_CUSTOMER_SUPPORT_AGENT_TOKEN,
       true,

@@ -1,5 +1,5 @@
 import {
-  BindCartOptions,
+  BindCartParams,
   CustomerListsPage,
   CustomerSearchOptions,
   CustomerSearchPage,
@@ -14,10 +14,9 @@ export abstract class AsmAdapter {
     options: CustomerSearchOptions
   ): Observable<CustomerSearchPage>;
 
-  abstract bindCart(options: BindCartOptions): Observable<unknown>;
-
   /**
    * Abstract function used to get customer lists.
    */
   abstract customerLists(): Observable<CustomerListsPage>;
+  abstract bindCart(options: BindCartParams): Observable<unknown>;
 }

@@ -1,0 +1,38 @@
+<form (submit)="bindCartToCustomer()">
+  <label for="cartNumber">{{ 'asm.bindCart.cartNumber' | cxTranslate }} </label>
+  <div
+    role="search"
+    aria-label="Assign a cart id to customer"
+    class="assignCart"
+    [class.active]="cartId.valid"
+    (click)="cartIdElement.focus()"
+  >
+    <input
+      autocomplete="off"
+      #cartIdElement
+      formcontrolname="cartNumber"
+      [formControl]="cartId"
+      (keydown.enter)="bindCartToCustomer()"
+      aria-label="Enter cart id"
+    />
+    <button
+      class="reset"
+      aria-label="Reset"
+      [class.visible]="cartId.value?.length > 0"
+      (click)="clearText()"
+    >
+      <cx-icon class="cx-icon fas fa-times-circle"></cx-icon>
+    </button>
+    <div role="presentation" class="search-icon">
+      <cx-icon class="cx-icon fas fa-search"></cx-icon>
+    </div>
+  </div>
+  <button
+    class="bindCartToCustomer"
+    [disabled]="cartId.invalid"
+    type="submit"
+    [class.active]="cartId.valid"
+  >
+    {{ 'asm.bindCart.bindCartToCustomer' | cxTranslate }}
+  </button>
+</form>

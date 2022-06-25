@@ -12,6 +12,7 @@ import {
 } from '../support/utils/intercept';
 import { login } from './auth-forms';
 import * as loginHelper from './login';
+import { navigateToCategory, navigateToHomepage } from './navigation';
 
 export function listenForAuthenticationRequest(): string {
   return interceptPost(
@@ -293,13 +294,20 @@ export function testCustomerEmulation() {
     cy.get('button[title="Close ASM"]').click();
     cy.get('cx-asm-main-ui').should('exist');
     cy.get('cx-asm-main-ui').should('not.be.visible');
+
+    // CXSPA-301/GH-14914
+    // Must ensure that site is still functional after service agent logout
+    navigateToHomepage();
+    cy.get('cx-storefront.stop-navigating').should('exist');
+    navigateToCategory('Brands', 'brands', false);
+    cy.get('cx-product-list-item').should('exist');
   });
 }
 
 export function bindCart() {
   const bindingRequest = listenForCartBindingRequest();
   //click button
-  cy.get('.assignCartToCustomer').click();
+  cy.get('.bindCartToCustomer').click();
   //make call
   cy.wait(bindingRequest).its('response.statusCode').should('eq', 200);
 }

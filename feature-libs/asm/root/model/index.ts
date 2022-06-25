@@ -1,3 +1,4 @@
+export * from './asm.models';
 export * from './bind-cart.model';
 export * from './customer-lists-page.model';
 export * from './customer-search-options.model';

@@ -1,11 +1,11 @@
 import { Provider } from '@angular/core';
-import { AsmFacadeService } from '@spartacus/asm/root';
-import { AsmQueryService } from './asm-query.service';
+import { AsmFacade } from '@spartacus/asm/root';
+import { AsmService } from './asm.service';
 
 export const facadeProviders: Provider[] = [
-  AsmQueryService,
+  AsmService,
   {
-    provide: AsmFacadeService,
-    useExisting: AsmQueryService,
+    provide: AsmFacade,
+    useExisting: AsmService,
   },
 ];

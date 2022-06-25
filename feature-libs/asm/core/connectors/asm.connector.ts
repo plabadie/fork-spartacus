@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {
-  BindCartOptions,
+  BindCartParams,
   CustomerListsPage,
   CustomerSearchOptions,
   CustomerSearchPage,
@@ -20,7 +20,7 @@ export class AsmConnector {
     return this.asmAdapter.customerSearch(options);
   }
 
-  bindCart(options: BindCartOptions): Observable<unknown> {
+  bindCart(options: BindCartParams): Observable<unknown> {
     return this.asmAdapter.bindCart(options);
   }
 

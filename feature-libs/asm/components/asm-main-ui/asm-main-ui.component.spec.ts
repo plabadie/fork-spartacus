@@ -13,8 +13,9 @@ import {
   waitForAsync,
 } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { AsmService, AsmUi } from '@spartacus/asm/core';
 import {
+  AsmFacade,
+  AsmUi,
   CsAgentAuthService,
   CustomerListColumnActionType,
 } from '@spartacus/asm/root';
@@ -24,9 +25,9 @@ import {
   I18nTestingModule,
   RoutingService,
   User,
-  UserService,
 } from '@spartacus/core';
 import { ModalRef, ModalService } from '@spartacus/storefront';
+import { UserAccountFacade } from '@spartacus/user/account/root';
 import { Observable, of } from 'rxjs';
 import { CustomerListComponent } from '../customer-list/customer-list.component';
 import { AsmComponentService } from '../services/asm-component.service';
@@ -51,7 +52,7 @@ class MockCsAgentAuthService implements Partial<CsAgentAuthService> {
   startCustomerEmulationSession(_customerId: string) {}
 }
 
-class MockUserService implements Partial<UserService> {
+class MockUserAccountFacade implements Partial<UserAccountFacade> {
   get(): Observable<User> {
     return of({});
   }
@@ -131,7 +132,7 @@ class MockAsmComponentService {
   }
 }
 
-class MockAsmService implements Partial<AsmService> {
+class MockAsmService implements Partial<AsmFacade> {
   getAsmUiState(): Observable<AsmUi> {
     return of(mockAsmUi);
   }
@@ -146,13 +147,13 @@ describe('AsmMainUiComponent', () => {
   let fixture: ComponentFixture<AsmMainUiComponent>;
   let authService: AuthService;
   let csAgentAuthService: CsAgentAuthService;
-  let userService: UserService;
+  let userAccountFacade: UserAccountFacade;
   let el: DebugElement;
   let globalMessageService: GlobalMessageService;
   let routingService: RoutingService;
   let asmComponentService: AsmComponentService;
-  let asmService: AsmService;
   let modalService: ModalService;
+  let asmFacade: AsmFacade;
 
   beforeEach(
     waitForAsync(() => {
@@ -169,12 +170,12 @@ describe('AsmMainUiComponent', () => {
         providers: [
           { provide: AuthService, useClass: MockAuthService },
           { provide: CsAgentAuthService, useClass: MockCsAgentAuthService },
-          { provide: UserService, useClass: MockUserService },
+          { provide: UserAccountFacade, useClass: MockUserAccountFacade },
           { provide: GlobalMessageService, useClass: MockGlobalMessageService },
           { provide: RoutingService, useClass: MockRoutingService },
           { provide: AsmComponentService, useClass: MockAsmComponentService },
-          { provide: AsmService, useClass: MockAsmService },
           { provide: ModalService, useClass: MockModalService },
+          { provide: AsmFacade, useClass: MockAsmService },
         ],
       }).compileComponents();
     })
@@ -184,12 +185,12 @@ describe('AsmMainUiComponent', () => {
     fixture = TestBed.createComponent(AsmMainUiComponent);
     authService = TestBed.inject(AuthService);
     csAgentAuthService = TestBed.inject(CsAgentAuthService);
-    userService = TestBed.inject(UserService);
+    userAccountFacade = TestBed.inject(UserAccountFacade);
     globalMessageService = TestBed.inject(GlobalMessageService);
     routingService = TestBed.inject(RoutingService);
     asmComponentService = TestBed.inject(AsmComponentService);
-    asmService = TestBed.inject(AsmService);
     modalService = TestBed.inject(ModalService);
+    asmFacade = TestBed.inject(AsmFacade);
     component = fixture.componentInstance;
     el = fixture.debugElement;
     fixture.detectChanges();
@@ -260,7 +261,7 @@ describe('AsmMainUiComponent', () => {
   });
 
   it('should not display the login form by default and when the collapse state is true', () => {
-    spyOn(asmService, 'getAsmUiState').and.returnValue(of({ collapsed: true }));
+    spyOn(asmFacade, 'getAsmUiState').and.returnValue(of({ collapsed: true }));
     spyOn(csAgentAuthService, 'isCustomerSupportAgentLoggedIn').and.returnValue(
       of(false)
     );
@@ -278,7 +279,7 @@ describe('AsmMainUiComponent', () => {
       of(true)
     );
     spyOn(authService, 'isUserLoggedIn').and.returnValue(of(false));
-    spyOn(userService, 'get').and.returnValue(of({}));
+    spyOn(userAccountFacade, 'get').and.returnValue(of({}));
     component.ngOnInit();
     fixture.detectChanges();
     expect(el.query(By.css('cx-csagent-login-form'))).toBeFalsy();
@@ -289,12 +290,12 @@ describe('AsmMainUiComponent', () => {
   });
 
   it('should not display the customer selection state when an agent is signed in and when the collapse state is true', () => {
-    spyOn(asmService, 'getAsmUiState').and.returnValue(of({ collapsed: true }));
+    spyOn(asmFacade, 'getAsmUiState').and.returnValue(of({ collapsed: true }));
     spyOn(csAgentAuthService, 'isCustomerSupportAgentLoggedIn').and.returnValue(
       of(true)
     );
     spyOn(authService, 'isUserLoggedIn').and.returnValue(of(false));
-    spyOn(userService, 'get').and.returnValue(of({}));
+    spyOn(userAccountFacade, 'get').and.returnValue(of({}));
     component.ngOnInit();
     fixture.detectChanges();
     expect(el.query(By.css('cx-csagent-login-form'))).toBeFalsy();
@@ -310,7 +311,7 @@ describe('AsmMainUiComponent', () => {
       of(true)
     );
     spyOn(authService, 'isUserLoggedIn').and.returnValue(of(true));
-    spyOn(userService, 'get').and.returnValue(of(testUser));
+    spyOn(userAccountFacade, 'get').and.returnValue(of(testUser));
     component.ngOnInit();
     fixture.detectChanges();
 
@@ -322,13 +323,13 @@ describe('AsmMainUiComponent', () => {
   });
 
   it('should not display customer emulation state when a customer is signed in and when the collapse state is true', () => {
-    spyOn(asmService, 'getAsmUiState').and.returnValue(of({ collapsed: true }));
+    spyOn(asmFacade, 'getAsmUiState').and.returnValue(of({ collapsed: true }));
     const testUser = { uid: 'user@test.com', name: 'Test User' } as User;
     spyOn(csAgentAuthService, 'isCustomerSupportAgentLoggedIn').and.returnValue(
       of(true)
     );
     spyOn(authService, 'isUserLoggedIn').and.returnValue(of(true));
-    spyOn(userService, 'get').and.returnValue(of(testUser));
+    spyOn(userAccountFacade, 'get').and.returnValue(of(testUser));
     component.ngOnInit();
     fixture.detectChanges();
 
