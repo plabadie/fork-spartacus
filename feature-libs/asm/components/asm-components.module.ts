@@ -11,6 +11,7 @@ import {
   NgSelectA11yModule,
   PasswordVisibilityToggleModule,
   PopoverModule,
+  SortingModule,
   SpinnerModule,
 } from '@spartacus/storefront';
 import { AsmBindCartComponent } from './asm-bind-cart/asm-bind-cart.component';
@@ -23,7 +24,6 @@ import { CustomerEmulationComponent } from './customer-emulation/customer-emulat
 import { CustomerListComponent } from './customer-list/customer-list.component';
 import { CustomerSelectionComponent } from './customer-selection/customer-selection.component';
 import { defaultAsmLayoutConfig } from './default-asm-layout.config';
-
 @NgModule({
   imports: [
     CommonModule,
@@ -39,6 +39,7 @@ import { defaultAsmLayoutConfig } from './default-asm-layout.config';
     PopoverModule,
     KeyboardFocusModule,
     NgSelectA11yModule,
+    SortingModule,
   ],
   declarations: [
     AsmMainUiComponent,
