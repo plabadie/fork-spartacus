@@ -5,9 +5,10 @@ import {
   ConfiguratorRouterExtractorService,
 } from '@spartacus/product-configurator/common';
 import { Observable } from 'rxjs';
-import { filter, switchMap, take } from 'rxjs/operators';
+import { filter, map, switchMap, take } from 'rxjs/operators';
 import { ConfiguratorCommonsService } from '../../core/facade/configurator-commons.service';
 import { ConfiguratorGroupsService } from '../../core/facade/configurator-groups.service';
+ 
 import { Configurator } from '../../core/model/configurator.model';
 import { ConfiguratorStorefrontUtilsService } from '../service/configurator-storefront-utils.service';
 import { ConfigFormUpdateEvent } from './configurator-form.event';
@@ -30,6 +31,11 @@ export class ConfiguratorFormComponent implements OnInit {
         );
       })
     );
+  variants$ = this.configuration$.pipe(
+    filter((config) => config.variants !== undefined),
+    map((config) => config.variants)
+  );
+
   currentGroup$: Observable<Configurator.Group> =
     this.configRouterExtractorService
       .extractRouterData()

@@ -1,4 +1,16 @@
 <ng-container *ngIf="configuration$ | async as configuration; else ghostForm">
+   List of Variants:
+  <ng-container *ngIf="variants$ | async as variants">
+    <div
+   
+    *ngFor="
+      let variant of variants
+      
+    "
+  >
+ {{variant.productCode}}
+  </div>
+    </ng-container>
   <ng-container *ngIf="currentGroup$ | async as currentGroup">
     <div id="{{ createGroupId(currentGroup.id) }}" role="tabpanel">
       <ng-container *ngIf="isConflictGroupType(currentGroup.groupType)">
