@@ -5,6 +5,7 @@ import { RulebasedConfiguratorRootFeatureModule } from './rulebased-configurator
 import { RulebasedConfiguratorRoutingModule } from './rulebased-configurator-routing.module';
 import { VariantConfiguratorInteractiveModule } from './variant/variant-configurator-interactive.module';
 import { VariantConfiguratorOverviewModule } from './variant/variant-configurator-overview.module';
+import { OccEmulatedCustomerInterceptorModule } from './variant/interceptor/occ-emulated-user-interceptor.module';
 
 /**
  * Exposes the root modules that we need to load statically. Contains page mappings, route configurations
@@ -17,6 +18,7 @@ import { VariantConfiguratorOverviewModule } from './variant/variant-configurato
     RulebasedConfiguratorRootFeatureModule,
     VariantConfiguratorInteractiveModule,
     VariantConfiguratorOverviewModule,
+    OccEmulatedCustomerInterceptorModule,
     RulebasedConfiguratorRoutingModule.forRoot(),
   ],
 })
