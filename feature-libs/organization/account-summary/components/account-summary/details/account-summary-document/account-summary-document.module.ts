@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CmsConfig, I18nModule, provideDefaultConfig, UrlModule } from '@spartacus/core';
 import { AccountSummaryDocumentComponent } from './account-summary-document.component';
+import { AgGridModule } from 'ag-grid-angular';
 
 @NgModule({
   declarations: [AccountSummaryDocumentComponent],
@@ -11,6 +12,7 @@ import { AccountSummaryDocumentComponent } from './account-summary-document.comp
     RouterModule,
     UrlModule,
     I18nModule,
+    AgGridModule,
   ],
   providers: [
     provideDefaultConfig(<CmsConfig>{

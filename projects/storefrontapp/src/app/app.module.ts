@@ -24,6 +24,7 @@ import { AppRoutingModule, StorefrontComponent } from '@spartacus/storefront';
 import { environment } from '../environments/environment';
 import { TestOutletModule } from '../test-outlets/test-outlet.module';
 import { SpartacusModule } from './spartacus/spartacus.module';
+import { AgGridModule } from 'ag-grid-angular';
 
 registerLocaleData(localeDe);
 registerLocaleData(localeJa);
@@ -45,6 +46,7 @@ if (!environment.production) {
     SpartacusModule,
     TestOutletModule, // custom usages of cxOutletRef only for e2e testing
     TestConfigModule.forRoot({ cookie: 'cxConfigE2E' }), // Injects config dynamically from e2e tests. Should be imported after other config modules.
+    AgGridModule,
 
     ...devImports,
   ],

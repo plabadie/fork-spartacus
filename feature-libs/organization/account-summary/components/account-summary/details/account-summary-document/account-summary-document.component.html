@@ -1,1 +1,9 @@
-<p>account-summary-document component</p>
+<ag-grid-angular
+  class="ag-theme-alpine"
+  style="height: 100%; width: 100%; min-width: 240px; min-height: 480px"
+  [rowData]="rowData"
+  [columnDefs]="colDefs"
+  [defaultColDef]="defaultColDef"
+  [animateRows]="true"
+  (gridReady)="onGridReady($event)"
+></ag-grid-angular>
