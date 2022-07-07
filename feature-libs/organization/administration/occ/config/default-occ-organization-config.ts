@@ -39,6 +39,9 @@ export const defaultOccOrganizationConfig: OccConfig = {
           '/users/${userId}/orgUnitUserGroups/${userGroupId}/orderApprovalPermissions',
         userGroupOrderApprovalPermission:
           '/users/${userId}/orgUnitUserGroups/${userGroupId}/orderApprovalPermissions/${orderApprovalPermissionCode}',
+        accountSummary: '/users/${userId}/accountSummary',
+        accountSummaryDocument: '/users/${userId}/document/${documentNumber}',
+        accountSummaryDocuments: '/users/${userId}/documents',
         costCenters: '/costcenters',
         costCenter: '/costcenters/${costCenterCode}',
         costCentersAll: '/costcentersall',

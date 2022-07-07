@@ -6,6 +6,7 @@ import { CostCenterConnector } from './connectors/cost-center/cost-center.connec
 import { OrgUnitConnector } from './connectors/org-unit/org-unit.connector';
 import { PermissionConnector } from './connectors/permission/permission.connector';
 import { UserGroupConnector } from './connectors/user-group/user-group.connector';
+import { AccountSummaryConnector } from './connectors/account-summary/account-summary.connector';
 import { OrganizationBadRequestHandler } from './http-interceptors/bad-request/bad-request.handler';
 import { OrganizationConflictHandler } from './http-interceptors/conflict/conflict.handler';
 import { OrganizationPageMetaModule } from './services/organization-page-meta.module';
@@ -37,6 +38,7 @@ export class AdministrationCoreModule {
         PermissionConnector,
         CostCenterConnector,
         B2BUserConnector,
+        AccountSummaryConnector,
       ],
     };
   }

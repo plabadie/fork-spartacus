@@ -12,6 +12,7 @@ import { defaultPermissionRoutingConfig } from './config/default-permission-rout
 import { defaultUnitsRoutingConfig } from './config/default-units-routing.config';
 import { defaultUserGroupRoutingConfig } from './config/default-user-group-routing.config';
 import { defaultUserRoutingConfig } from './config/default-user-routing.config';
+import { defaultAccountSummaryRoutingConfig } from './config/default-account-summary-routing.config';
 import { ORGANIZATION_ADMINISTRATION_FEATURE } from './feature-name';
 
 // TODO: Inline this factory when we start releasing Ivy compiled libraries
@@ -26,6 +27,8 @@ export function defaultOrganizationAdministrationComponentsConfig(): CmsConfig {
           'ManageUnitsListComponent',
           'ManageUsersListComponent',
           'ManageUserGroupsListComponent',
+          'ManageAccountSummaryListComponent',
+          'ManageAccountSummaryDetailsComponent',
         ],
       },
     },
@@ -47,6 +50,7 @@ export function defaultOrganizationAdministrationComponentsConfig(): CmsConfig {
     provideDefaultConfig(defaultUnitsRoutingConfig),
     provideDefaultConfig(defaultUserRoutingConfig),
     provideDefaultConfig(defaultUserGroupRoutingConfig),
+    provideDefaultConfig(defaultAccountSummaryRoutingConfig),
 
     provideDefaultConfigFactory(
       defaultOrganizationAdministrationComponentsConfig

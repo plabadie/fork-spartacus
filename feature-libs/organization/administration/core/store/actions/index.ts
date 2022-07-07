@@ -1,3 +1,4 @@
+import * as AccountSummaryActions from './account-summary.action';
 import * as BudgetActions from './budget.action';
 import * as OrgUnitActions from './org-unit.action';
 import * as UserGroupActions from './user-group.action';
@@ -7,6 +8,7 @@ import * as B2BUserActions from './b2b-user.action';
 import * as OrganizationActions from './organization.action';
 
 export {
+  AccountSummaryActions,
   BudgetActions,
   OrgUnitActions,
   UserGroupActions,

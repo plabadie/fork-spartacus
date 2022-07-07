@@ -5,3 +5,4 @@ export * from './default-permission-routing.config';
 export * from './default-units-routing.config';
 export * from './default-user-group-routing.config';
 export * from './default-user-routing.config';
+export * from './default-account-summary-routing.config';

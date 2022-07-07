@@ -9,4 +9,5 @@ export const ROUTE_PARAMS = {
   userGroupCode: 'userGroupCode',
   permissionCode: 'permissionCode',
   addressCode: 'addressId',
+  accountSummaryCode: 'accountSummaryCode',
 };

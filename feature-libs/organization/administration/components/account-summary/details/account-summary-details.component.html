@@ -1,0 +1,122 @@
+<cx-org-card
+  *ngIf="model$ | async as model"
+  i18nRoot="orgAccountSummary.details"
+  [cxFocus]="{ refreshFocus: model }"
+  [showHint]="true"
+>
+
+  <cx-org-disable-info
+    info
+    i18nRoot="orgAccountSummary"
+    [displayInfoConfig]="{ disabledDisable: true }"
+  >
+  </cx-org-disable-info>
+
+  <section main class="details" cxOrgItemExists>
+    <div class="property">
+      <label>{{ 'orgAccountSummary.uid' | cxTranslate }}</label>
+      <span class="value">
+        {{ model.b2BUnitWsDTO?.uid }}
+      </span>
+    </div>
+
+    <div class="property">
+      <label>{{ 'orgAccountSummary.name' | cxTranslate }}</label>
+      <span class="value">
+        {{ model.b2BUnitWsDTO?.name }}
+      </span>
+    </div>
+
+    <div class="property">
+      <label>{{ 'orgAccountSummary.currentBalance' | cxTranslate }}</label>
+      <span class="value">
+        {{ model.amountBalanceData?.currentBalance }}
+      </span>
+    </div>
+
+    <div class="property">
+      <label>{{ 'orgAccountSummary.openBalance' | cxTranslate }}</label>
+      <span class="value">
+        {{ model.amountBalanceData?.openBalance }}
+      </span>
+    </div>
+
+    <div class="property">
+      <label>{{ 'orgAccountSummary.address' | cxTranslate }}</label>
+      <span class="value">
+        {{ model.billingAddress?.fullnameWithTitle }}<br/>
+        {{ model.billingAddress?.formattedAddress }}<br/>
+        {{ model.billingAddress?.country?.name }}
+      </span>
+    </div>
+
+    <div class="property">
+      <label>{{ 'orgAccountSummary.pastDueBalance' | cxTranslate }}</label>
+      <span class="value">
+        {{ model.amountBalanceData?.pastDueBalance }}
+      </span>
+    </div>
+
+    <div class="property" *ngIf="model.approvalProcess?.name">
+      <label>{{ 'orgUnit.approvalProcess' | cxTranslate }}</label>
+      <span class="value">
+        {{ model.approvalProcess?.name }}
+      </span>
+    </div>
+
+    <div class="property" *ngIf="model.parentOrgUnit">
+      <label>{{ 'orgUnit.parentUnit' | cxTranslate }}</label>
+      <a
+        class="value"
+        [routerLink]="
+          {
+            cxRoute: 'orgUnitDetails',
+            params: model.parentOrgUnit
+          } | cxUrl
+        "
+      >
+        {{ model.parentOrgUnit?.name }}
+      </a>
+    </div>
+  </section>
+
+  <section main class="link-list">
+    <ng-container *ngIf="model.uid">
+      <a
+        class="link"
+        [routerLink]="{ cxRoute: 'orgUnitChildren', params: model } | cxUrl"
+        routerLinkActive="is-current"
+      >
+        {{ 'orgUnit.links.units' | cxTranslate }}
+      </a>
+      <a
+        class="link"
+        [routerLink]="{ cxRoute: 'orgUnitUserList', params: model } | cxUrl"
+        routerLinkActive="is-current"
+      >
+        {{ 'orgUnit.links.users' | cxTranslate }}
+      </a>
+      <a
+        class="link"
+        [routerLink]="{ cxRoute: 'orgUnitApprovers', params: model } | cxUrl"
+        routerLinkActive="is-current"
+      >
+        {{ 'orgUnit.links.approvers' | cxTranslate }}
+      </a>
+      <a
+        class="link"
+        [routerLink]="{ cxRoute: 'orgUnitAddressList', params: model } | cxUrl"
+        routerLinkActive="is-current"
+      >
+        {{ 'orgUnit.links.shippingAddresses' | cxTranslate }}
+      </a>
+      <a
+        class="link"
+        [routerLink]="{ cxRoute: 'orgUnitCostCenters', params: model } | cxUrl"
+        routerLinkActive="is-current"
+      >
+        {{ 'orgUnit.links.costCenters' | cxTranslate }}
+      </a>
+    </ng-container>
+  </section>
+</cx-org-card>

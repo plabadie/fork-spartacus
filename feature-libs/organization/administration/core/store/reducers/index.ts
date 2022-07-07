@@ -7,6 +7,8 @@ import {
   MetaReducer,
 } from '@ngrx/store';
 import {
+  AccountSummary,
+  AccountSummaryDocument,
   Address,
   AuthActions,
   B2BApprovalProcess,
@@ -24,6 +26,10 @@ import { B2BUnitNode } from '../../model/unit-node.model';
 import { UserGroup } from '../../model/user-group.model';
 import { OrganizationActions } from '../actions';
 import {
+  ACCOUNT_SUMMARY_DETAILS,
+  ACCOUNT_SUMMARY_DOCUMENTS,
+  ACCOUNT_SUMMARY_FEATURE,
+  ACCOUNT_SUMMARY_LIST,
   ADDRESS_ENTITIES,
   ADDRESS_LIST,
   B2B_USER_APPROVERS,
@@ -57,6 +63,11 @@ import {
   USER_LIST,
 } from '../organization-state';
 import {
+  // accountSummaryDetailsReducer,
+  accountSummaryEntitiesReducer,
+  accountSummaryListReducer
+} from './account-summary.reducer';
+import {
   b2bUserApproverListReducer,
   b2bUserEntitiesReducer,
   b2bUserPermissionListReducer,
@@ -87,6 +98,20 @@ import {
 
 export function getReducers(): ActionReducerMap<OrganizationState, any> {
   return {
+    [ACCOUNT_SUMMARY_FEATURE]: combineReducers({
+      details: StateUtils.entityLoaderReducer<AccountSummary>(
+        ACCOUNT_SUMMARY_DETAILS,
+        // accountSummaryDetailsReducer
+      ),
+      entities: StateUtils.entityLoaderReducer<AccountSummaryDocument>(
+        ACCOUNT_SUMMARY_DOCUMENTS,
+        accountSummaryEntitiesReducer
+      ),
+      list: StateUtils.entityLoaderReducer<ListModel>(
+        ACCOUNT_SUMMARY_LIST,
+        accountSummaryListReducer
+      ),
+    }),
     [BUDGET_FEATURE]: combineReducers({
       entities: StateUtils.entityLoaderReducer<Budget, any>(
         BUDGET_ENTITIES,

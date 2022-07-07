@@ -116,3 +116,10 @@ export interface BaseSite {
   urlEncodingAttributes?: string[];
   baseStore?: BaseStore;
 }
+
+export interface DocumentType {
+  code?: string;
+  displayInAllList?: boolean;
+  includeInOpenBalance?: boolean;
+  name?: string;
+}

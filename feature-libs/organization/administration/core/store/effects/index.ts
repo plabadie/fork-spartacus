@@ -4,8 +4,10 @@ import { PermissionEffects } from './permission.effect';
 import { CostCenterEffects } from './cost-center.effect';
 import { B2BUserEffects } from './b2b-user.effect';
 import { UserGroupEffects } from './user-group.effect';
+import { AccountSummaryEffects } from "./account-summary.effect";
 
 export const effects: any[] = [
+  AccountSummaryEffects,
   BudgetEffects,
   OrgUnitEffects,
   UserGroupEffects,

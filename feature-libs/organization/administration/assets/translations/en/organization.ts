@@ -1,3 +1,4 @@
+import { orgAccountSummary } from './account-summary.i18n';
 import { orgBudget, orgBudgetAssignedCostCenters } from './budget.i18n';
 import {
   orgCostCenter,
@@ -106,6 +107,7 @@ export const organization = {
   },
 
   // sub feature labels are added below
+  orgAccountSummary,
   orgCostCenter,
   orgCostCenterBudgets,
   orgCostCenterAssignedBudgets,

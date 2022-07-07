@@ -4,3 +4,4 @@ export * from './cost-center/index';
 export * from './org-unit/index';
 export * from './permission/index';
 export * from './user-group/index';
+export * from './account-summary';

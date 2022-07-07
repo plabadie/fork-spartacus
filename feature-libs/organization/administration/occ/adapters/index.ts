@@ -1,3 +1,4 @@
+export * from './occ-account-summary.adapter';
 export * from './occ-budget.adapter';
 export * from './occ-cost-center.adapter';
 export * from './occ-org-unit.adapter';
