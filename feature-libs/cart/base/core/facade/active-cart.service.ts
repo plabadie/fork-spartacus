@@ -94,12 +94,23 @@ export class ActiveCartService implements ActiveCartFacade, OnDestroy {
       })
     );
 
+    // allow multiple emits of empty cart object to be stoped by distinctUntilChanged()
+    let i = 0; // DELETE ME : development tracking
+    const emptyCartGenerator = (): Cart => ({ emptyCart: ++i } as Cart);
+    let emptyCart: Cart = emptyCartGenerator();
     this.activeCart$ = using(
       () => loading.subscribe(),
       () => cartValue$
     ).pipe(
       // Normalization for empty cart value returned as empty object.
-      map(({ cart }) => (cart ? cart : {})),
+      map(({ cart }) => {
+        if (cart) {
+          emptyCart = emptyCartGenerator();
+          return cart;
+        } else {
+          return emptyCart as Cart;
+        }
+      }),
       distinctUntilChanged(),
       shareReplay({ bufferSize: 1, refCount: true })
     );

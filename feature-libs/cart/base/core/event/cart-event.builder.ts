@@ -6,6 +6,7 @@ import {
   CartAddEntryEvent,
   CartAddEntryFailEvent,
   CartAddEntrySuccessEvent,
+  CartChangeEvent,
   CartRemoveEntryFailEvent,
   CartRemoveEntrySuccessEvent,
   CartUpdateEntryFailEvent,
@@ -16,6 +17,7 @@ import {
   DeleteCartEvent,
   DeleteCartFailEvent,
   DeleteCartSuccessEvent,
+  RemoveCartEvent,
 } from '@spartacus/cart/base/root';
 import {
   ActionToEventMapping,
@@ -23,8 +25,17 @@ import {
   EventService,
   StateEventService,
 } from '@spartacus/core';
-import { Observable, of } from 'rxjs';
-import { filter, map, switchMap, withLatestFrom } from 'rxjs/operators';
+import { combineLatest, merge, Observable, of } from 'rxjs';
+import {
+  buffer,
+  delay,
+  filter,
+  map,
+  pairwise,
+  startWith,
+  switchMap,
+  withLatestFrom,
+} from 'rxjs/operators';
 import { CartActions } from '../store/index';
 
 /**
@@ -49,6 +60,7 @@ export class CartEventBuilder {
     this.registerAddEntry();
     this.registerRemoveEntry();
     this.registerUpdateEntry();
+    this.registerCartChangeEvent();
     this.registerDeleteCart();
   }
 
@@ -176,6 +188,67 @@ export class CartEventBuilder {
       )
     );
     return this.event.register(mapping.event as Type<T>, eventStream$);
+  }
+
+  protected registerCartChangeEvent(): void {
+    const cartStream$ = this.activeCartService.getActive();
+
+    const deleteCart$ = this.event.get(DeleteCartSuccessEvent);
+
+    const cartChangeStream$ = merge(
+      this.event.get(CreateCartSuccessEvent),
+      deleteCart$,
+      this.event.get(RemoveCartEvent),
+      this.event.get(CartAddEntrySuccessEvent),
+      this.event.get(CartRemoveEntrySuccessEvent),
+      this.event.get(CartUpdateEntrySuccessEvent)
+    ).pipe(
+      buffer(
+        combineLatest([cartStream$, deleteCart$.pipe(startWith(''), delay(0))])
+      ),
+      withLatestFrom(cartStream$.pipe(pairwise())),
+
+      // tap({
+      //   next: ([events, [previousCart, newCart]]) => {
+      //     {
+      //       console.group(`Cart Change Event ${events.length}`);
+
+      //       {
+      //         console.groupCollapsed(`old cart (${previousCart.totalUnitCount})`);
+      //         console.log(previousCart);
+      //         console.groupEnd();
+      //       }
+
+      //       events.forEach((event) => {
+      //         console.log(event.constructor.name, event);
+      //       });
+
+      //       {
+      //         console.groupCollapsed(`new cart (${newCart.totalUnitCount})`);
+      //         console.log(newCart);
+      //         console.groupEnd();
+      //       }
+
+      //       console.groupEnd();
+      //     }
+      //   },
+      //   error: (x) => console.log('n', x),
+      //   complete: () => console.log('c', '???'),
+      // }),
+      filter(([events]) => events.length > 0),
+      map(([events, [previousCart, currentCart]]) =>
+        createFrom(CartChangeEvent, {
+          cartCode: currentCart.code ?? '',
+          cartId: currentCart.guid ?? '',
+          userId: currentCart.user?.uid ?? '',
+          previousCart,
+          currentCart,
+          changes: events,
+        })
+      )
+    );
+
+    this.event.register(CartChangeEvent, cartChangeStream$);
   }
 
   /**

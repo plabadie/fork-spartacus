@@ -9,7 +9,7 @@ export interface ActionToEventMapping<T> {
   /**
    * Event class type (constructor)
    */
-  event: Type<T> | null;
+  event: Type<T>; // TODO: Keep? never used as null, impl does not support null
 
   /**
    * Function mapping the instance of the action to the event
