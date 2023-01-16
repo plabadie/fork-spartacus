@@ -149,6 +149,7 @@ jobs:
     name: Slack message for failed develop CI build in Spartacus
     runs-on: ubuntu-latest
     if: ${{ false }}
+    steps:
       - name: Notify the slack channel of when build conclusion failed
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_TOKEN }}
