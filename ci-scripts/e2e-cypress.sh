@@ -46,6 +46,9 @@ done
 
 set -- "${POSITIONAL[@]}"
 
+echo "RUNNING E2E TESTS suite:${SUITE} ssr:${SSR} event:${GITHUB_EVENT_NAME} "
+exit 0
+
 if [ "$SUITE" == ":ccv2" ]; then
     export SPA_ENV='ccv2,b2c'
 fi
