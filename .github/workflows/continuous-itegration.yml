@@ -129,7 +129,7 @@ jobs:
           ci-scripts/validate-lint.sh
   build_conclusion:
     needs: [no_retries, unit_tests_core, unit_tests_libs, linting, sonarqube_scan]
-    name: Build Conclusion
+    name: Continuous Integration Conclusion
     runs-on: ubuntu-latest
     if: ${{ always() }}
     steps:
@@ -144,69 +144,3 @@ jobs:
           needs.unit_tests_libs.result == 'failure' || needs.unit_tests_libs.result == 'cancelled' ||
           needs.sonarqube_scan.result == 'failure' || needs.sonarqube_scan.result == 'cancelled' ||
           needs.linting.result == 'failure' || needs.linting.result == 'cancelled'
-  send_slack_message:
-    needs: build_conclusion
-    name: Slack message for failed develop CI build in Spartacus
-    runs-on: ubuntu-latest
-    if: ${{ false }}
-    steps:
-      - name: Notify the slack channel of when build conclusion failed
-        env:
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_TOKEN }}
-        uses: slackapi/slack-github-action@v1.19.0
-        with:
-          channel-id: ${{ secrets.SLACK_NOTIFICATION_CHANNEL }}
-          payload: |
-            {
-              "blocks": [
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": ":nuclear-bomb: :fireduck: *Broken build in develop*"
-                  }
-                },
-                {
-                  "type": "divider"
-                },
-                {
-                  "type": "actions",
-                  "elements": [
-                    {
-                      "type": "button",
-                      "text": {
-                        "type": "plain_text",
-                        "text": "Failed build",
-                        "emoji": true
-                      },
-                      "value": "failed_build",
-                      "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-                    },
-                    {
-                      "type": "button",
-                      "text": {
-                        "type": "plain_text",
-                        "text": "What was committed?",
-                        "emoji": true
-                      },
-                      "value": "recent_merged_commit",
-                      "url": "${{ github.event.head_commit.url }}"
-                    },
-                    {
-                      "type": "button",
-                      "text": {
-                        "type": "plain_text",
-                        "text": "Build history",
-                        "emoji": true
-                      },
-                      "value": "buid_history",
-                      "url": "https://github.com/SAP/spartacus/actions/workflows/ci.yml?query=branch%3Adevelop"
-                    }
-                  ]
-                }
-              ]
-            }
-        if: | 
-          needs.build_conclusion.result == 'failure' &&
-          github.event_name == 'push' && 
-          github.ref_name == 'develop'

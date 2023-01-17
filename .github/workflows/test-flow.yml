@@ -1,0 +1,43 @@
+on:
+  push:
+    branches:
+      - develop
+      - release/**
+  pull_request:
+    types: [opened, synchronize]
+  workflow_dispatch:
+    # empty as it is used only to manually trigger the workflow
+  
+env:
+  NODE_VERSION: '16'
+
+concurrency: 
+  group: ci-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+name: Test Flow Failure
+jobs:
+  job01:
+    name: Job 01
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run Script
+        run: run.sh 45 0 
+  job02:
+    name: Job 02
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run Script
+        run: run.sh 45 0 
+  job03:
+    name: Job 03
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run Script
+        run: run.sh 10 1 
+  job04:
+    name: Job 04
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run Script
+        run: run.sh 45 0 
