@@ -25,7 +25,7 @@ jobs:
         with:
           fetch-depth: 0    
       - name: Run Script
-        run: ./run.sh 5 0 
+        run: ./run.sh 45 0 
   job02:
     name: Job 02
     runs-on: ubuntu-latest
@@ -34,7 +34,7 @@ jobs:
         with:
           fetch-depth: 0    
       - name: Run Script
-        run: ./run.sh 5 0 
+        run: ./run.sh 45 0 
   job03:
     name: Job 03
     runs-on: ubuntu-latest
@@ -43,7 +43,7 @@ jobs:
         with:
           fetch-depth: 0    
       - name: Run Script
-        run: ./run.sh 5 0 
+        run: ./run.sh 45 0 
   job04:
     name: Job 04
     runs-on: ubuntu-latest
@@ -52,4 +52,4 @@ jobs:
         with:
           fetch-depth: 0    
       - name: Run Script
-        run: ./run.sh 5 0 
+        run: ./run.sh 45 0 
