@@ -43,7 +43,7 @@ jobs:
         with:
           fetch-depth: 0    
       - name: Run Script
-        run: ./run.sh 45 0 
+        run: ./run.sh 5 1 
   job04:
     name: Job 04
     runs-on: ubuntu-latest
