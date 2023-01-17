@@ -1,8 +1,8 @@
 on:
-  push:
-    branches:
-      - develop
-      - release/**
+  # push:
+  #   branches:
+  #     - develop
+  #     - release/**
   pull_request:
     types: [opened, synchronize]
   workflow_dispatch:
