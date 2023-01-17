@@ -1,10 +1,10 @@
 on:
   push:
-    branches:
-      - develop
-      - release/**
-  pull_request:
-    types: [opened, synchronize]
+  #   branches:
+  #     - develop
+  #     - release/**
+  # pull_request:
+  #   types: [opened, synchronize]
   workflow_dispatch:
     # empty as it is used only to manually trigger the workflow
   
